@@ -229,6 +229,9 @@ let correctOptionIndex = 0;
 let selectedQuestions = [];
 let maxQuestions = 8;
 
+// Ensure the button is connected to the startQuiz function
+document.getElementById('start-button').addEventListener('click', startQuiz);
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
