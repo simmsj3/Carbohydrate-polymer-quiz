@@ -227,10 +227,6 @@ const questions = [
   }
 ];
 
-
-xxxxxxxxxxxxxxxx
-
-
 let currentQuestionIndex = 0;
 let correctAttempts = 0;
 let incorrectAttempts = 0;
