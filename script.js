@@ -274,11 +274,12 @@ function loadQuestion() {
     </ul>
   `;
 
-  // Hide any feedback or explanation when loading a new question
+  // Reset visibility of feedback and explanation
   document.getElementById('feedback-correct').classList.add('hidden');
   document.getElementById('feedback-incorrect').classList.add('hidden');
   document.getElementById('expanded-info').classList.add('hidden');
-  updateProgressBar();
+  
+  updateProgressBar(); // Update progress bar
 }
 
 function checkAnswer(selectedIndex) {
@@ -307,10 +308,14 @@ function retry() {
 
 function nextQuestion() {
   currentQuestionIndex++;
+  
+  // Ensure there are still questions remaining
   if (currentQuestionIndex < selectedQuestions.length) {
-    loadQuestion();
+    document.getElementById('feedback-correct').classList.add('hidden'); // Hide the feedback
+    document.getElementById('question-container').classList.remove('hidden'); // Show the question container
+    loadQuestion(); // Load the next question
   } else {
-    endQuiz();
+    endQuiz(); // If no more questions, show the end quiz screen
   }
 }
 
