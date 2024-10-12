@@ -1,3 +1,8 @@
+// Ensure the button is connected to the startQuiz function after DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById('start-button').addEventListener('click', startQuiz);
+});
+
 const questions = [
   {
     question: "Which of the following is a homopolysaccharide?",
@@ -222,6 +227,10 @@ const questions = [
   }
 ];
 
+
+xxxxxxxxxxxxxxxx
+
+
 let currentQuestionIndex = 0;
 let correctAttempts = 0;
 let incorrectAttempts = 0;
@@ -229,9 +238,6 @@ let randomizedOptions = [];
 let correctOptionIndex = 0;
 let selectedQuestions = [];
 let maxQuestions = 8;
-
-// Ensure the button is connected to the startQuiz function
-document.getElementById('start-button').addEventListener('click', startQuiz);
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
