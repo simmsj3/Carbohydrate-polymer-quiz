@@ -237,11 +237,18 @@ function shuffle(array) {
 }
 
 function startQuiz() {
+  // Hide the intro screen and display the quiz screen
   document.getElementById('intro-container').classList.add('hidden');
   document.getElementById('quiz-container').classList.remove('hidden');
+  
+  // Shuffle and select the questions
   shuffle(questions);
   selectedQuestions = questions.slice(0, maxQuestions); // Select 8 random questions
+  
+  // Load the first question
   loadQuestion();
+  
+  // Initialize the progress bar
   updateProgressBar();
 }
 
