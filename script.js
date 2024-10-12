@@ -220,12 +220,10 @@ const questions = [
     The body's glycogen stores are limited, so they must be replenished regularly through the diet. 
     Glycogen plays a crucial role in maintaining metabolic balance and supporting physical performance.`
   }
-  
-];
 
 let currentQuestionIndex = 0;
-let incorrectAttempts = 0;
 let correctAttempts = 0;
+let incorrectAttempts = 0;
 let randomizedOptions = [];
 let correctOptionIndex = 0;
 let selectedQuestions = [];
@@ -244,17 +242,17 @@ function startQuiz() {
   shuffle(questions);
   selectedQuestions = questions.slice(0, maxQuestions); // Select 8 random questions
   loadQuestion();
-  updateProgressBar(); // Initialize progress bar
+  updateProgressBar();
 }
 
 function loadQuestion() {
   const questionData = selectedQuestions[currentQuestionIndex];
-  
+
   // Shuffle options and track correct answer position
   randomizedOptions = [...questionData.options];
   shuffle(randomizedOptions);
   correctOptionIndex = randomizedOptions.indexOf(questionData.correct);
-  
+
   const container = document.getElementById('question-container');
   container.innerHTML = `
     <p>${questionData.question}</p>
@@ -263,20 +261,22 @@ function loadQuestion() {
     </ul>
   `;
 
-  updateProgressBar(); // Update progress bar on each question
+  // Hide any feedback or explanation when loading a new question
+  document.getElementById('feedback-correct').classList.add('hidden');
+  document.getElementById('feedback-incorrect').classList.add('hidden');
+  document.getElementById('expanded-info').classList.add('hidden');
+  updateProgressBar();
 }
 
 function checkAnswer(selectedIndex) {
   if (selectedIndex === correctOptionIndex) {
     correctAttempts++;
     document.getElementById('feedback-correct').classList.remove('hidden');
-    document.getElementById('feedback-incorrect').classList.add('hidden');
-    document.getElementById('expanded-info').classList.add('hidden');
+    document.getElementById('question-container').classList.add('hidden');
   } else {
     incorrectAttempts++;
-    correctAttempts--;
-    document.getElementById('feedback-correct').classList.add('hidden');
     document.getElementById('feedback-incorrect').classList.remove('hidden');
+    document.getElementById('question-container').classList.add('hidden');
   }
 }
 
@@ -288,16 +288,13 @@ function showExplanation() {
 }
 
 function retry() {
-  document.getElementById('feedback-correct').classList.add('hidden');
   document.getElementById('expanded-info').classList.add('hidden');
-  document.getElementById('feedback-incorrect').classList.add('hidden');
-  loadQuestion();
+  document.getElementById('question-container').classList.remove('hidden');
 }
 
 function nextQuestion() {
   currentQuestionIndex++;
   if (currentQuestionIndex < selectedQuestions.length) {
-    document.getElementById('feedback-correct').classList.add('hidden');
     loadQuestion();
   } else {
     endQuiz();
@@ -311,19 +308,17 @@ function updateProgressBar() {
 
 function endQuiz() {
   const endMessage = document.getElementById('end-message');
+  document.getElementById('quiz-container').classList.add('hidden');
   endMessage.classList.remove('hidden');
-  
+
   if (correctAttempts === 8) {
     endMessage.innerHTML = `
       <p>Well done! You got ${correctAttempts} out of 8 correct!</p>
-      <p>You've aced the quiz!</p>
       <div class="confetti">🎉</div>
-      <script>confettiEffect();</script>
     `;
   } else if (correctAttempts >= 6) {
     endMessage.innerHTML = `
       <p>Great work! You got ${correctAttempts} out of 8 correct!</p>
-      <p>You're nearly there!</p>
       <div class="balloons">
         <img src="balloon1.png" alt="Balloon">
         <img src="balloon2.png" alt="Balloon">
