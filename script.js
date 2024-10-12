@@ -227,14 +227,17 @@ const questions = [
   }
 ];
 
+
+
 let currentQuestionIndex = 0;
 let correctAttempts = 0;
 let incorrectAttempts = 0;
 let randomizedOptions = [];
 let correctOptionIndex = 0;
 let selectedQuestions = [];
-let maxQuestions = 8;
+let maxQuestions = 8; // Number of questions to be randomly selected
 
+// Shuffle function to randomize the order of questions and options
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -242,26 +245,24 @@ function shuffle(array) {
   }
 }
 
+// Start the quiz by hiding the intro and loading the first question
 function startQuiz() {
-  // Hide the intro screen and display the quiz screen
   document.getElementById('intro-container').classList.add('hidden');
   document.getElementById('quiz-container').classList.remove('hidden');
   
   // Shuffle and select the questions
-  shuffle(questions);
+  shuffle(questions); // Assume the questions array is already defined
   selectedQuestions = questions.slice(0, maxQuestions); // Select 8 random questions
   
-  // Load the first question
-  loadQuestion();
-  
-  // Initialize the progress bar
-  updateProgressBar();
+  loadQuestion(); // Load the first question
+  updateProgressBar(); // Initialize the progress bar
 }
 
+// Load a new question into the quiz container
 function loadQuestion() {
   const questionData = selectedQuestions[currentQuestionIndex];
 
-  // Shuffle options and track correct answer position
+  // Shuffle the options for the current question
   randomizedOptions = [...questionData.options];
   shuffle(randomizedOptions);
   correctOptionIndex = randomizedOptions.indexOf(questionData.correct);
@@ -270,18 +271,20 @@ function loadQuestion() {
   container.innerHTML = `
     <p>${questionData.question}</p>
     <ul>
-      ${randomizedOptions.map((option, index) => `<li><button onclick="checkAnswer(${index})">${String.fromCharCode(65 + index)}) ${option}</button></li>`).join('')}
+      ${randomizedOptions.map((option, index) => 
+        `<li><button onclick="checkAnswer(${index})">${String.fromCharCode(65 + index)}) ${option}</button></li>`).join('')}
     </ul>
   `;
 
-  // Reset visibility of feedback and explanation
+  // Hide feedback and explanation when loading a new question
   document.getElementById('feedback-correct').classList.add('hidden');
   document.getElementById('feedback-incorrect').classList.add('hidden');
   document.getElementById('expanded-info').classList.add('hidden');
-  
-  updateProgressBar(); // Update progress bar
+
+  updateProgressBar(); // Update progress bar on each new question
 }
 
+// Check if the selected answer is correct or incorrect
 function checkAnswer(selectedIndex) {
   if (selectedIndex === correctOptionIndex) {
     correctAttempts++;
@@ -294,6 +297,7 @@ function checkAnswer(selectedIndex) {
   }
 }
 
+// Show explanation after incorrect answer
 function showExplanation() {
   const questionData = selectedQuestions[currentQuestionIndex];
   document.getElementById('feedback-incorrect').classList.add('hidden');
@@ -301,15 +305,17 @@ function showExplanation() {
   document.getElementById('expanded-text').innerText = questionData.explanation;
 }
 
+// Allow the user to retry the question after reading the explanation
 function retry() {
   document.getElementById('expanded-info').classList.add('hidden');
   document.getElementById('question-container').classList.remove('hidden');
 }
 
+// Move to the next question after answering correctly
 function nextQuestion() {
   currentQuestionIndex++;
   
-  // Ensure there are still questions remaining
+  // Check if there are still questions left
   if (currentQuestionIndex < selectedQuestions.length) {
     document.getElementById('feedback-correct').classList.add('hidden'); // Hide the feedback
     document.getElementById('question-container').classList.remove('hidden'); // Show the question container
@@ -319,24 +325,26 @@ function nextQuestion() {
   }
 }
 
+// Update the progress bar as the user moves through the quiz
 function updateProgressBar() {
   const progress = ((currentQuestionIndex + 1) / maxQuestions) * 100;
   document.getElementById('progress-bar').style.width = `${progress}%`;
 }
 
+// End the quiz and show the final message based on the user's performance
 function endQuiz() {
   const endMessage = document.getElementById('end-message');
   document.getElementById('quiz-container').classList.add('hidden');
   endMessage.classList.remove('hidden');
 
-  if (correctAttempts === 8) {
+  if (correctAttempts === maxQuestions) {
     endMessage.innerHTML = `
-      <p>Well done! You got ${correctAttempts} out of 8 correct!</p>
+      <p>Well done! You got ${correctAttempts} out of ${maxQuestions} correct!</p>
       <div class="confetti">🎉</div>
     `;
   } else if (correctAttempts >= 6) {
     endMessage.innerHTML = `
-      <p>Great work! You got ${correctAttempts} out of 8 correct!</p>
+      <p>Great work! You got ${correctAttempts} out of ${maxQuestions} correct!</p>
       <div class="balloons">
         <img src="balloon1.png" alt="Balloon">
         <img src="balloon2.png" alt="Balloon">
@@ -344,8 +352,9 @@ function endQuiz() {
     `;
   } else {
     endMessage.innerHTML = `
-      <p>Don't worry! You got ${correctAttempts} out of 8 correct.</p>
+      <p>Don't worry! You got ${correctAttempts} out of ${maxQuestions} correct.</p>
       <p>Keep practicing and try the quiz again!</p>
     `;
   }
 }
+
