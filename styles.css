@@ -10,6 +10,7 @@ body {
 
 h1 {
   color: #2c3e50;
+  font-size: 36px; /* Bigger font size for the title */
   margin-bottom: 20px;
 }
 
@@ -22,14 +23,54 @@ h1 {
   width: 100%;
 }
 
-#question-container, #feedback-correct, #feedback-incorrect, #expanded-info {
+#question-container p {
+  font-size: 22px; /* Bigger font size for questions */
+  color: #333;
   margin-bottom: 20px;
 }
 
-button {
+#question-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+#question-container li {
+  margin-bottom: 15px;
+}
+
+#question-container button {
+  font-size: 20px; /* Bigger font size for answer buttons */
   background-color: #3498db;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: left;
+}
+
+#question-container button:hover {
+  background-color: #2980b9;
+}
+
+#feedback-correct, #feedback-incorrect {
+  font-size: 20px; /* Bigger font size for feedback messages */
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+#expanded-info {
+  font-size: 18px; /* Bigger font size for explanations */
+  color: #555;
+}
+
+button {
+  font-size: 20px; /* Bigger font size for buttons */
+  background-color: #3498db;
+  color: white;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -40,17 +81,13 @@ button:hover {
   background-color: #2980b9;
 }
 
-.hidden {
-  display: none;
-}
-
 #score-text {
-  font-size: 18px;
+  font-size: 24px; /* Bigger font size for the score */
   margin-top: 20px;
 }
 
 #end-message {
-  font-size: 20px;
+  font-size: 24px; /* Bigger font size for the end message */
   font-weight: bold;
   color: #2c3e50;
   text-align: center;
