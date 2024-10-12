@@ -9,24 +9,33 @@
 <body>
   <h1>Carbohydrate Quiz</h1>
 
+  <!-- Intro Page -->
   <div id="intro-container">
-    <p>This quiz consists of 8 random questions from a larger pool of questions. Each time you take the quiz, you'll get different questions. You earn a point for each correct answer, and lose a point for incorrect answers. Try to get the highest score possible!</p>
+    <p>Welcome to the Carbohydrate Quiz! This quiz consists of 8 random questions from a larger pool of questions. Each time you take the quiz, you'll get different questions.</p>
+    <p>If you answer a question incorrectly, you'll be shown an explanation. Read it carefully before going back to the question and retrying. You gain 1 point for each correct answer, and lose 1 point for incorrect answers. Aim for a perfect score!</p>
     <button onclick="startQuiz()">Start Quiz</button>
   </div>
 
+  <!-- Quiz Page -->
   <div id="quiz-container" class="hidden">
     <div id="progress-bar-container">
       <div id="progress-bar"></div>
     </div>
     <div id="question-container"></div>
+
+    <!-- Correct Feedback -->
     <div id="feedback-correct" class="hidden">
       <p><strong>Correct!</strong> Good job. You can now move to the next question.</p>
       <button onclick="nextQuestion()">Next Question</button>
     </div>
+
+    <!-- Incorrect Feedback (with explanation) -->
     <div id="feedback-incorrect" class="hidden">
       <p><strong>Incorrect.</strong> Please read the information below carefully.</p>
       <button onclick="showExplanation()">Read More</button>
     </div>
+
+    <!-- Explanation Block -->
     <div id="expanded-info" class="hidden">
       <h2>Explanation</h2>
       <p id="expanded-text"></p>
@@ -34,6 +43,7 @@
     </div>
   </div>
 
+  <!-- End Message -->
   <div id="end-message" class="hidden"></div>
 
   <script src="script.js"></script>
