@@ -220,6 +220,7 @@ const questions = [
     The body's glycogen stores are limited, so they must be replenished regularly through the diet. 
     Glycogen plays a crucial role in maintaining metabolic balance and supporting physical performance.`
   }
+];
 
 let currentQuestionIndex = 0;
 let correctAttempts = 0;
