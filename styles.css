@@ -1,127 +1,117 @@
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+const questions = [
+  // Complete list of 25 questions, as provided earlier
+];
 
-h1 {
-  color: #2c3e50;
-  font-size: 36px; /* Bigger font size for the title */
-  margin-bottom: 20px;
-}
+let currentQuestionIndex = 0;
+let incorrectAttempts = 0;
+let correctAttempts = 0;
+let randomizedOptions = [];
+let correctOptionIndex = 0;
+let selectedQuestions = [];
+let maxQuestions = 8;
 
-#quiz-container {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  max-width: 600px;
-  width: 100%;
-}
-
-#question-container p {
-  font-size: 22px; /* Bigger font size for questions */
-  color: #333;
-  margin-bottom: 20px;
-}
-
-#question-container ul {
-  list-style: none;
-  padding: 0;
-}
-
-#question-container li {
-  margin-bottom: 15px;
-}
-
-#question-container button {
-  font-size: 20px; /* Bigger font size for answer buttons */
-  background-color: #3498db;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: 100%;
-  text-align: left;
-}
-
-#question-container button:hover {
-  background-color: #2980b9;
-}
-
-#feedback-correct, #feedback-incorrect {
-  font-size: 20px; /* Bigger font size for feedback messages */
-  color: #2c3e50;
-  margin-bottom: 20px;
-}
-
-#expanded-info {
-  font-size: 18px; /* Bigger font size for explanations */
-  color: #555;
-}
-
-button {
-  font-size: 20px; /* Bigger font size for buttons */
-  background-color: #3498db;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-#score-text {
-  font-size: 24px; /* Bigger font size for the score */
-  margin-top: 20px;
-}
-
-#end-message {
-  font-size: 24px; /* Bigger font size for the end message */
-  font-weight: bold;
-  color: #2c3e50;
-  text-align: center;
-  margin-top: 40px;
-}
-
-.confetti {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
-}
-
-.balloons {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.balloons img {
-  width: 100px;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
-  50% {
-    transform: translateY(-20px);
+}
+
+function startQuiz() {
+  document.getElementById('intro-container').classList.add('hidden');
+  document.getElementById('quiz-container').classList.remove('hidden');
+  shuffle(questions);
+  selectedQuestions = questions.slice(0, maxQuestions); // Select 8 random questions
+  loadQuestion();
+  updateProgressBar(); // Initialize progress bar
+}
+
+function loadQuestion() {
+  const questionData = selectedQuestions[currentQuestionIndex];
+  
+  // Shuffle options and track correct answer position
+  randomizedOptions = [...questionData.options];
+  shuffle(randomizedOptions);
+  correctOptionIndex = randomizedOptions.indexOf(questionData.correct);
+  
+  const container = document.getElementById('question-container');
+  container.innerHTML = `
+    <p>${questionData.question}</p>
+    <ul>
+      ${randomizedOptions.map((option, index) => `<li><button onclick="checkAnswer(${index})">${String.fromCharCode(65 + index)}) ${option}</button></li>`).join('')}
+    </ul>
+  `;
+
+  updateProgressBar(); // Update progress bar on each question
+}
+
+function checkAnswer(selectedIndex) {
+  if (selectedIndex === correctOptionIndex) {
+    correctAttempts++;
+    document.getElementById('feedback-correct').classList.remove('hidden');
+    document.getElementById('feedback-incorrect').classList.add('hidden');
+    document.getElementById('expanded-info').classList.add('hidden');
+  } else {
+    incorrectAttempts++;
+    correctAttempts--;
+    document.getElementById('feedback-correct').classList.add('hidden');
+    document.getElementById('feedback-incorrect').classList.remove('hidden');
   }
-  100% {
-    transform: translateY(0);
+}
+
+function showExplanation() {
+  const questionData = selectedQuestions[currentQuestionIndex];
+  document.getElementById('feedback-incorrect').classList.add('hidden');
+  document.getElementById('expanded-info').classList.remove('hidden');
+  document.getElementById('expanded-text').innerText = questionData.explanation;
+}
+
+function retry() {
+  document.getElementById('feedback-correct').classList.add('hidden');
+  document.getElementById('expanded-info').classList.add('hidden');
+  document.getElementById('feedback-incorrect').classList.add('hidden');
+  loadQuestion();
+}
+
+function nextQuestion() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < selectedQuestions.length) {
+    document.getElementById('feedback-correct').classList.add('hidden');
+    loadQuestion();
+  } else {
+    endQuiz();
+  }
+}
+
+function updateProgressBar() {
+  const progress = ((currentQuestionIndex + 1) / maxQuestions) * 100;
+  document.getElementById('progress-bar').style.width = `${progress}%`;
+}
+
+function endQuiz() {
+  const endMessage = document.getElementById('end-message');
+  endMessage.classList.remove('hidden');
+  
+  if (correctAttempts === 8) {
+    endMessage.innerHTML = `
+      <p>Well done! You got ${correctAttempts} out of 8 correct!</p>
+      <p>You've aced the quiz!</p>
+      <div class="confetti">🎉</div>
+      <script>confettiEffect();</script>
+    `;
+  } else if (correctAttempts >= 6) {
+    endMessage.innerHTML = `
+      <p>Great work! You got ${correctAttempts} out of 8 correct!</p>
+      <p>You're nearly there!</p>
+      <div class="balloons">
+        <img src="balloon1.png" alt="Balloon">
+        <img src="balloon2.png" alt="Balloon">
+      </div>
+    `;
+  } else {
+    endMessage.innerHTML = `
+      <p>Don't worry! You got ${correctAttempts} out of 8 correct.</p>
+      <p>Keep practicing and try the quiz again!</p>
+    `;
   }
 }
