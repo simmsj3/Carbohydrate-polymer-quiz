@@ -223,7 +223,6 @@ const questions = [
   
 ];
 
-// Variables
 let currentQuestionIndex = 0;
 let incorrectAttempts = 0;
 let correctAttempts = 0;
@@ -240,9 +239,12 @@ function shuffle(array) {
 }
 
 function startQuiz() {
+  document.getElementById('intro-container').classList.add('hidden');
+  document.getElementById('quiz-container').classList.remove('hidden');
   shuffle(questions);
   selectedQuestions = questions.slice(0, maxQuestions); // Select 8 random questions
   loadQuestion();
+  updateProgressBar(); // Initialize progress bar
 }
 
 function loadQuestion() {
@@ -260,6 +262,8 @@ function loadQuestion() {
       ${randomizedOptions.map((option, index) => `<li><button onclick="checkAnswer(${index})">${String.fromCharCode(65 + index)}) ${option}</button></li>`).join('')}
     </ul>
   `;
+
+  updateProgressBar(); // Update progress bar on each question
 }
 
 function checkAnswer(selectedIndex) {
@@ -273,7 +277,6 @@ function checkAnswer(selectedIndex) {
     correctAttempts--;
     document.getElementById('feedback-correct').classList.add('hidden');
     document.getElementById('feedback-incorrect').classList.remove('hidden');
-    updateScore();
   }
 }
 
@@ -301,8 +304,9 @@ function nextQuestion() {
   }
 }
 
-function updateScore() {
-  document.getElementById('score-text').innerText = `Score: ${correctAttempts}`;
+function updateProgressBar() {
+  const progress = ((currentQuestionIndex + 1) / maxQuestions) * 100;
+  document.getElementById('progress-bar').style.width = `${progress}%`;
 }
 
 function endQuiz() {
@@ -332,7 +336,3 @@ function endQuiz() {
     `;
   }
 }
-
-// Trigger quiz start
-startQuiz();
-
